@@ -254,8 +254,8 @@
       padding: 10px;
       border: 2px solid transparent;
       transition: 0.2s;
-      display: grid;
-      grid-template-rows: auto auto 1fr auto;
+      display: flex;
+      flex-direction: column;
       min-height: 0;
       min-width: 0;
       overflow: hidden;
@@ -282,31 +282,43 @@
     }
 
     .small-stats {
-      color: var(--muted) !important;
-      -webkit-text-fill-color: var(--muted) !important;
       display: flex;
       justify-content: space-between;
-      color: var(--muted);
+      color: var(--muted) !important;
+      -webkit-text-fill-color: var(--muted) !important;
       font-size: clamp(11px, 1.1vw, 15px);
-      margin-bottom: 6px;
+      margin-bottom: 0;
       gap: 8px;
       flex-wrap: wrap;
     }
 
+    .score-wrap {
+      flex: 1 1 auto;
+      min-height: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin-top: 6px;
+      margin-bottom: 6px;
+    }
+
     .score {
-      color: var(--text) !important;
-      -webkit-text-fill-color: var(--text) !important;
-      text-shadow: 0 0 0 var(--text);
       display: flex;
       align-items: center;
       justify-content: center;
       text-align: center;
       font-size: clamp(42px, 9vw, 118px);
       font-weight: 900;
-      color: var(--text);
+      color: var(--text) !important;
+      -webkit-text-fill-color: var(--text) !important;
+      text-shadow: 0 0 0 var(--text);
       line-height: 1;
       min-height: 0;
       min-width: 0;
+      align-self: center;
+      justify-self: center;
+      margin: 0;
     }
 
     .players.players-3 .score {
@@ -321,7 +333,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-top: 6px;
+      margin-top: auto;
       min-width: 0;
     }
 
@@ -573,12 +585,17 @@
       }
 
       .small-stats {
-        margin-bottom: 2px;
+        margin-bottom: 0;
         font-size: clamp(10px, 0.9vw, 13px);
       }
 
       .score {
         font-size: clamp(34px, 6vw, 72px);
+      }
+
+      .score-wrap {
+        margin-top: 2px;
+        margin-bottom: 2px;
       }
 
       .players.players-3 .score,
@@ -588,7 +605,7 @@
 
       .btn-grid {
         gap: 6px;
-        margin-top: 4px;
+        margin-top: auto;
       }
 
       .btn-grid button {
@@ -1050,7 +1067,7 @@
             <span>&nbsp;</span>
             <span>HR: <span>${player.highRun}</span></span>
           </div>
-          <div class="score">${player.score}</div>
+          <div class="score-wrap"><div class="score">${player.score}</div></div>
           <div class="btn-grid">
             <button class="big green" onclick="addScore(${player.id}, 1)">+1</button>
             <button class="big red" onclick="addScore(${player.id}, -1)">-1</button>
