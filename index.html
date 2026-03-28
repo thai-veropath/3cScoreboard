@@ -785,7 +785,9 @@
         id: i + 1,
         name: `Player ${i + 1}`,
         score: 0,
-        turns: 0
+        turns: 0,
+        currentRun: 0,
+        highRun: 0
       }));
     }
 
@@ -820,6 +822,14 @@
     function avg(score, turns) {
       if (!turns) return '0.00';
       return (score / turns).toFixed(2);
+    }
+
+    function finalizeRun(player) {
+      if (!player) return;
+      if (player.currentRun > player.highRun) {
+        player.highRun = player.currentRun;
+      }
+      player.currentRun = 0;
     }
 
     function computeInnings() {
@@ -862,10 +872,12 @@
       while (index !== targetIndex) {
         index = (index + 1) % total;
         moved = true;
+        finalizeRun(state.players[index]);
         state.players[index].turns += 1;
       }
 
       if (!moved && !state.currentTurnStarted) {
+        finalizeRun(state.players[targetIndex]);
         state.players[targetIndex].turns += 1;
       }
 
@@ -912,7 +924,9 @@
           id: i + 1,
           name: getPlayerNameFromInput(i),
           score: 0,
-          turns: 0
+          turns: 0,
+          currentRun: 0,
+          highRun: 0
         });
       }
 
@@ -943,6 +957,12 @@
       const player = state.players[targetIndex];
       player.score += delta;
       if (player.score < 0) player.score = 0;
+      if (delta > 0) {
+        player.currentRun += delta;
+        if (player.currentRun > player.highRun) {
+          player.highRun = player.currentRun;
+        }
+      }
 
       normalizeTurnState();
       checkWinner();
@@ -987,6 +1007,8 @@
       state.players.forEach(p => {
         p.score = 0;
         p.turns = 0;
+        p.currentRun = 0;
+        p.highRun = 0;
       });
       state.currentPlayerIndex = 0;
       state.innings = 0;
@@ -1023,6 +1045,10 @@
           <div class="small-stats">
             <span>Lượt: <span>${player.turns}</span></span>
             <span>Avg: <span>${avg(player.score, player.turns)}</span></span>
+          </div>
+          <div class="small-stats">
+            <span>&nbsp;</span>
+            <span>HR: <span>${player.highRun}</span></span>
           </div>
           <div class="score">${player.score}</div>
           <div class="btn-grid">
